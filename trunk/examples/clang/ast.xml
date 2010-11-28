@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<CLANG_XML>
+  <TranslationUnit>
+    <Typedef id="_1" context="_2" name="__int128_t" type="_4"/>
+    <Typedef id="_5" context="_2" name="__uint128_t" type="_7"/>
+    <CXXRecord id="_8" file="f1" line="102" col="16" context="_2" name="__va_list_tag" type="_9">
+      <Field id="_A" file="f1" line="102" col="42" context="_8" name="gp_offset" type="_C" access="public"/>
+      <Field id="_D" file="f1" line="102" col="63" context="_8" name="fp_offset" type="_C" access="public"/>
+      <Field id="_E" file="f1" line="102" col="81" context="_8" name="overflow_arg_area" type="_10" access="public"/>
+      <Field id="_13" file="f1" line="102" col="107" context="_8" name="reg_save_area" type="_10" access="public"/>
+    </CXXRecord>
+    <Typedef id="_14" file="f1" line="102" col="123" context="_2" name="__va_list_tag" type="_16"/>
+    <Typedef id="_18" file="f1" line="102" col="159" context="_2" name="__builtin_va_list" type="_1A"/>
+    <CXXRecord id="_1D" file="f2" line="1" col="8" context="_2" name="MyClass" type="_1E">
+      <Field id="_1F" file="f2" line="3" col="17" context="_1D" name="_a" type="_21" access="public"/>
+      <Field id="_22" file="f2" line="4" col="25" context="_1D" name="_b" type="_21" mutable="1" access="public"/>
+      <CXXConstructor id="_23" file="f2" line="6" col="3" context="_1D" name="MyClass" type="_12" function_type="_24" is_default_ctor="1" access="public" num_args="0">
+        <Body>
+          <CompoundStmt file="f2" line="6" col="37" endcol="38" num_stmts="0"/>
+        </Body>
+      </CXXConstructor>
+      <CXXMethod id="_25" file="f2" line="7" col="17" context="_1D" name="func" type="_21" function_type="_26" access="public" num_args="0">
+        <Body>
+          <CompoundStmt file="f2" line="8" col="3" endline="11" endcol="3" num_stmts="2">
+            <DeclStmt file="f2" line="9" col="5" endcol="30">
+              <Var id="_27" file="f2" line="9" col="19" context="_25" name="r" type="_21">
+                <BinaryOperator file="f2" line="9" col="23" endcol="28" type="_21" kind="add">
+                  <MemberExpr file="f2" line="9" col="23" type="_21" is_deref="1" ref="_1F" name="_a">
+                    <CXXThisExpr file="f2" line="9" col="23" type="_29"/>
+                  </MemberExpr>
+                  <MemberExpr file="f2" line="9" col="28" type="_21" is_deref="1" ref="_22" name="_b">
+                    <CXXThisExpr file="f2" line="9" col="28" type="_29"/>
+                  </MemberExpr>
+                </BinaryOperator>
+              </Var>
+            </DeclStmt>
+            <ReturnStmt file="f2" line="10" col="5" endcol="12">
+              <DeclRefExpr file="f2" line="10" col="12" type="_21" ref="_27" name="r"/>
+            </ReturnStmt>
+          </CompoundStmt>
+        </Body>
+      </CXXMethod>
+    </CXXRecord>
+  </TranslationUnit>
+  <ReferenceSection>
+    <Types>
+      <ArrayType type="_1C" size="1" id="_1A"/>
+      <FundamentalType kind="unsigned int" id="_C"/>
+      <FundamentalType kind="unsigned long" id="_21"/>
+      <FunctionType result_type="_21" id="_26"/>
+      <Record name="__va_list_tag" kind="struct" context="_2" id="_9"/>
+      <FundamentalType kind="__uint128_t" id="_7"/>
+      <FundamentalType kind="__int128_t" id="_4"/>
+      <PointerType type="_12" id="_10"/>
+      <FundamentalType kind="void" id="_12"/>
+      <Record name="MyClass" kind="struct" context="_2" id="_1E"/>
+      <Typedef type="_16" name="__va_list_tag" context="_2" id="_1C"/>
+      <FunctionType result_type="_12" id="_24"/>
+      <PointerType type="_1E" id="_29"/>
+      <ElaboratedType keyword="struct" type="_9" id="_16"/>
+    </Types>
+    <Contexts>
+      <CXXConstructor id="_23" name="MyClass" type="_24" context="_1D"/>
+      <CXXRecord id="_1D" name="MyClass" type="_1E" context="_2"/>
+      <CXXMethod id="_25" name="func" type="_26" context="_1D"/>
+      <CXXRecord id="_8" name="__va_list_tag" type="_9" context="_2"/>
+      <TranslationUnit id="_2"/>
+    </Contexts>
+    <Files>
+      <File id="f2" name="a.cpp"/>
+      <File id="f1" name="&amp;lt;built-in&amp;gt;"/>
+    </Files>
+  </ReferenceSection>
+</CLANG_XML>
