@@ -990,6 +990,7 @@ body.mobile .AdSense {
 <a class='addthis_button_blogger'/>
 <a class='addthis_button_twitter'/>
 <a class='addthis_button_facebook'/>
+<a class='addthis_button_zakladki.yandex.ru'/>
 <a class='addthis_button_preferred_1'/>
 <a class='addthis_button_preferred_2'/>
 <a class='addthis_button_preferred_3'/>
@@ -1000,7 +1001,16 @@ body.mobile .AdSense {
 <a class='addthis_button_compact'/>
 <a class='addthis_counter addthis_bubble_style'/>
 </div>
-<script type='text/javascript'>var addthis_config = {&quot;data_track_clickback&quot;:true, ui_language: &quot;ru&quot;};</script>
+<script type='text/javascript'>var addthis_config = { 
+data_track_clickback: true, 
+ui_language: &quot;ru&quot;,
+services_custom: {
+  name: &quot;Яндекс.Закладки&quot;,
+  url: &quot;http://zakladki.yandex.ru/newlink.xml?url={{url}}&amp;name={{title}}&quot;, 
+  icon: &quot;http://yandex.st/lego/_/AC7mVpvRdnWPRkfST9hZPQpoiAQ.ico&quot;
+ }
+};
+</script>
 <script src='http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4d9c1b4225448678' type='text/javascript'/>
 <!-- AddThis Button END -->
 
