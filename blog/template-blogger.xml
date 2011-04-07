@@ -956,28 +956,6 @@ body.mobile .AdSense {
       </div>
     </b:if>
 
-<!-- Related Posts BEGIN -->
-<b:if cond='data:blog.pageType == &quot;item&quot;'>
-  <script src='http://white-knight-is-alive.googlecode.com/svn/trunk/blog/blogger_related_posts.js'/>
-  <div id='related-posts'>
-    <p><br/>
-    <b:loop values='data:post.labels' var='label'>
-      <b:if cond='data:blog.pageType == &quot;item&quot;'>
-        <script expr:src='&quot;/feeds/posts/default/-/&quot; + data:label.name + &quot;?alt=json-in-script&amp;callback=related_results_labels_thumbs&amp;max-results=6&quot;' type='text/javascript'/>
-      </b:if>
-    </b:loop>
-    <script type='text/javascript'>
-      var currentposturl=&quot;<data:post.url/>&quot;;
-      var maxresults=5;
-      var relatedpoststitle=&quot;Читайте также:&quot;;
-      removeDuplicatesInRelatedPosts();
-      printRelatedPosts();
-    </script>
-    </p>
-  </div><div style='clear:both'/>
-</b:if>
-<!-- Related Posts END -->
-
     <div class='post-footer'>
     <div class='post-footer-line post-footer-line-1'><span class='post-author vcard'>
         <b:if cond='data:top.showAuthor'>
@@ -1053,6 +1031,25 @@ services_custom: {
       </span> </div>
     </div>
   </div>
+<!-- Related Posts BEGIN -->
+<b:if cond='data:blog.pageType == &quot;item&quot;'>
+  <script src='http://white-knight-is-alive.googlecode.com/svn/trunk/blog/blogger_related_posts.js'/>
+  <div id='related-posts'>
+    <b:loop values='data:post.labels' var='label'>
+      <b:if cond='data:blog.pageType == &quot;item&quot;'>
+        <script expr:src='&quot;/feeds/posts/default/-/&quot; + data:label.name + &quot;?alt=json-in-script&amp;callback=related_results_labels_thumbs&amp;max-results=6&quot;' type='text/javascript'/>
+      </b:if>
+    </b:loop>
+    <script type='text/javascript'>
+      var currentposturl=&quot;<data:post.url/>&quot;;
+      var maxresults=5;
+      var relatedpoststitle=&quot;Читайте также:&quot;;
+      removeDuplicatesInRelatedPosts();
+      printRelatedPosts();
+    </script>
+  </div><div style='clear:both'/>
+</b:if>
+<!-- Related Posts END -->
 </b:includable>
 <b:includable id='status-message'>
   <b:if cond='data:navMessage'>
