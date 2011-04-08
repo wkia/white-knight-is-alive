@@ -688,6 +688,18 @@ body.mobile .AdSense {
     <div class='region-inner header-inner'>
       <b:section class='header' id='header' maxwidgets='1' showaddelement='no'>
 <b:widget id='Header1' locked='true' title='Заметки Белого Рыцаря (заголовок)' type='Header'>
+<b:includable id='title'>
+  <b:if cond='data:blog.url == data:blog.homepageUrl'>
+    <data:title/>
+  <b:else/>
+    <a expr:href='data:blog.homepageUrl'><data:title/></a>
+  </b:if>
+</b:includable>
+<b:includable id='description'>
+  <div class='descriptionwrapper'>
+    <span class='description'><data:description/></span>
+  </div>
+</b:includable>
 <b:includable id='main'>
 
   <b:if cond='data:useImage'>
@@ -742,18 +754,6 @@ body.mobile .AdSense {
       <b:include name='description'/>
     </div>
   </b:if>
-</b:includable>
-<b:includable id='title'>
-  <b:if cond='data:blog.url == data:blog.homepageUrl'>
-    <data:title/>
-  <b:else/>
-    <a expr:href='data:blog.homepageUrl'><data:title/></a>
-  </b:if>
-</b:includable>
-<b:includable id='description'>
-  <div class='descriptionwrapper'>
-    <p class='description'><span><data:description/></span></p>
-  </div>
 </b:includable>
 </b:widget>
 </b:section>
