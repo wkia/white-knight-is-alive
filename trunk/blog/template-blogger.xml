@@ -628,6 +628,13 @@ body.mobile .AdSense {
 
 </script>
 
+<!-- VKontakte Init BEGIN -->
+<script src='http://userapi.com/js/api/openapi.js?23' type='text/javascript'/>
+<script type='text/javascript'>
+  VK.init({apiId: 2262873, onlyWidgets: true});
+</script>
+<!-- VKontakte Init END -->
+
   </head>
 
   <body expr:class='&quot;loading&quot; + data:blog.mobileClass'>
@@ -995,9 +1002,7 @@ body.mobile .AdSense {
 <a class='addthis_button_preferred_2'/>
 <a class='addthis_button_preferred_3'/>
 <a class='addthis_button_preferred_4'/>
-<a class='addthis_button_favorites'/>
 <a class='addthis_button_compact'/>
-<a class='addthis_counter addthis_bubble_style'/>
 </div>
 <script type='text/javascript'>var addthis_config = { 
 data_track_clickback: true, 
@@ -1017,6 +1022,17 @@ services_custom: [
 </script>
 <script src='http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4d9c1b4225448678' type='text/javascript'/>
 <!-- AddThis Button END -->
+
+<!-- VKontakte Like Button BEGIN -->
+<div expr:id='&quot;vk_like_&quot; + data:post.id'/>
+<script type='text/javascript'>
+  VK.Widgets.Like(&quot;vk_like_<data:post.id/>&quot;, 
+                  {type: &quot;button&quot;, verb: 1,
+                   pageTitle: &quot;<data:post.title/>&quot;,
+                   pageUrl: &quot;<data:post.url/>&quot;}, 
+                  <data:post.id/>);
+</script>
+<!-- VKontakte Like Button END -->
 
       <div class='post-footer-line post-footer-line-2'><span class='post-labels'>
         <b:if cond='data:post.labels'>
