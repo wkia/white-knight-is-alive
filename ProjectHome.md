@@ -1,0 +1,1 @@
+Some code from white-knight-is-alive.blogspot.com
