@@ -24,7 +24,7 @@ LIBS += $(shell $(LLVMCONF) --ldflags) \
     -lclangTooling \
     -Wl,--end-group
 
-LIBS += $(LLVMCONF) --system-libs
+LIBS += $(shell $(LLVMCONF) --system-libs)
 
 all:
 	$(CXX) $(CXXFLAGS) -o ./a.out testclang.cpp $(LIBS)
