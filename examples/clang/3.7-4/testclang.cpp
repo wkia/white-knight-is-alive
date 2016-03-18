@@ -182,6 +182,7 @@ public:
 
   virtual void HandleTranslationUnit (clang::ASTContext &Context) override
   {
+    assert(0 == Context.getDiagnostics().hasFatalErrorOccurred());
     _visitor.TraverseDecl(Context.getTranslationUnitDecl());
   }
 private:
