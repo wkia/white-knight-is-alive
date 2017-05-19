@@ -98,6 +98,26 @@ RVO testNRVO2(int value, size_t size, const void **localVec)
 }
 
 
+RVO testNRVO3(int value, size_t size, const void **localVec)
+{
+        std::cout << __FUNCTION__ << std::endl;
+        if (0 == value)
+        {
+                RVO vec(size * 2, value);
+
+                *localVec = &vec;
+                return vec;
+        }
+        else
+        {
+                RVO vec(size, value);
+
+                *localVec = &vec;
+                return vec;
+        }
+}
+
+
 int main()
 {
         {
@@ -150,6 +170,26 @@ int main()
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
                 RVO vec = testNRVO2(1, 10, &localVec);
+                if (&vec == localVec)
+                        std::cout << "NRVO was applied" << std::endl;
+                else
+                        std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
+        }
+        {
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO3(0, 10, &localVec);
+                if (&vec == localVec)
+                        std::cout << "NRVO was applied" << std::endl;
+                else
+                        std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
+        }
+        {
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO3(1, 10, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
