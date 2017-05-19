@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <sstream>
+#include <cstdlib>
+#include <ctime>
 
 typedef std::vector<int> int_vector;
 typedef int_vector Base;
@@ -120,16 +120,20 @@ RVO testNRVO3(int value, size_t size, const void **localVec)
 
 int main()
 {
+        srand(time(NULL));
+        const size_t size = (size_t)rand() % 100;
+        const int value = rand();
+    
         {
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
-                RVO vec = testRVO0(0, 10, &localVec);
+                RVO vec = testRVO0(value, size, &localVec);
                 std::cout << "-----" << std::endl;
         }
         {
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
-                RVO vec = testNRVO0(0, 10, &localVec);
+                RVO vec = testNRVO0(value, size, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
@@ -139,7 +143,7 @@ int main()
         {
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
-                RVO vec = testNRVO1(0, 10, &localVec);
+                RVO vec = testNRVO1(value, size, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
@@ -149,7 +153,7 @@ int main()
         {
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
-                RVO vec = testNRVO1(1, 10, &localVec);
+                RVO vec = testNRVO2(value, size, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
@@ -159,37 +163,7 @@ int main()
         {
                 std::cout << "=----" << std::endl;
                 const void *localVec = 0;
-                RVO vec = testNRVO2(0, 10, &localVec);
-                if (&vec == localVec)
-                        std::cout << "NRVO was applied" << std::endl;
-                else
-                        std::cout << "NRVO was not applied" << std::endl;
-                std::cout << "-----" << std::endl;
-        }
-        {
-                std::cout << "=----" << std::endl;
-                const void *localVec = 0;
-                RVO vec = testNRVO2(1, 10, &localVec);
-                if (&vec == localVec)
-                        std::cout << "NRVO was applied" << std::endl;
-                else
-                        std::cout << "NRVO was not applied" << std::endl;
-                std::cout << "-----" << std::endl;
-        }
-        {
-                std::cout << "=----" << std::endl;
-                const void *localVec = 0;
-                RVO vec = testNRVO3(0, 10, &localVec);
-                if (&vec == localVec)
-                        std::cout << "NRVO was applied" << std::endl;
-                else
-                        std::cout << "NRVO was not applied" << std::endl;
-                std::cout << "-----" << std::endl;
-        }
-        {
-                std::cout << "=----" << std::endl;
-                const void *localVec = 0;
-                RVO vec = testNRVO3(1, 10, &localVec);
+                RVO vec = testNRVO3(value, size, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
