@@ -3,75 +3,157 @@
 #include <string>
 #include <sstream>
 
-std::vector<int> testNRVO(int value, size_t size, const std::vector<int> **localVec)
+typedef std::vector<int> int_vector;
+typedef int_vector Base;
+
+class RVO : protected Base
 {
-        std::vector<int> vec;
+    public:
+    RVO()
+    {
+        std::cout << this << " ctor\n";
+    }
+    ~RVO()
+    {
+        std::cout << this << " dtor\n";
+    }
+    
+    RVO(size_t size, Base::value_type value) : Base(size, value) 
+    {
+        std::cout << this << " param ctor\n";
+    }
+    
+    RVO(const RVO &r)
+    {
+        std::cout << this << " copy ctor\n";
+        *((Base *)this) = (Base)r;
+    }
+    RVO & operator=(const RVO &r)
+    {
+        std::cout << this << " operator=\n";
+        if (&r != this)
+        {
+            *((Base *)this) = (Base)r;
+        }
+        return *this;
+    }
+    
+};
+
+
+RVO testRVO0(int value, size_t size, const void **localVec)
+{
+        std::cout << __FUNCTION__ << std::endl;
+        return RVO(size, value);
+}
+
+
+RVO testNRVO0(int value, size_t size, const void **localVec)
+{
+        std::cout << __FUNCTION__ << std::endl;
+        RVO vec(size, value);
+        *localVec = &vec;
+        return vec;
+}
+
+
+RVO testNRVO1(int value, size_t size, const void **localVec)
+{
+        std::cout << __FUNCTION__ << std::endl;
+        RVO vec;
         if (0 == value)
         {
-                vec = std::vector<int>(size, value);
+                vec = RVO(size * 2, value);
 
                 *localVec = &vec;
                 return vec;
         }
         else
         {
-                vec = std::vector<int>(size, value);
+                vec = RVO(size, value);
 
                 *localVec = &vec;
                 return vec;
         }
 }
 
-std::string testNRVOString(const char *str, const std::string **localVec)
+
+RVO testNRVO2(int value, size_t size, const void **localVec)
 {
-        std::string vec;
-        vec = std::string(str);
-        *localVec = &vec;
+        std::cout << __FUNCTION__ << std::endl;
+        RVO vec;
+        if (0 == value)
+        {
+                vec = RVO(size * 2, value);
+
+                *localVec = &vec;
+        }
+        else
+        {
+                vec = RVO(size, value);
+
+                *localVec = &vec;
+        }
         return vec;
 }
 
-std::string testNRVOStringStream(const char *str, const std::string **localVec)
-{
-        std::ostringstream os;
-        os << str;
-        std::string vec;
-        vec = std::string(os.str());
-        *localVec = &vec;
-        return vec;
-}
 
 int main()
 {
         {
-                const std::vector<int> *localVec = 0;
-                std::vector<int> vec = testNRVO(0, 10, &localVec);
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testRVO0(0, 10, &localVec);
+                std::cout << "-----" << std::endl;
+        }
+        {
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO0(0, 10, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
                         std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
         }
         {
-                const std::vector<int> *localVec = 0;
-                std::vector<int> vec = testNRVO(1, 10, &localVec);
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO1(0, 10, &localVec);
                 if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
                         std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
         }
         {
-                const std::string *localVec = 0;
-                std::string str = testNRVOString("test nrvo", &localVec);
-                if (&str == localVec)
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO1(1, 10, &localVec);
+                if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
                         std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
         }
         {
-                const std::string *localVec = 0;
-                std::string str = testNRVOStringStream("test nrvo", &localVec);
-                if (&str == localVec)
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO2(0, 10, &localVec);
+                if (&vec == localVec)
                         std::cout << "NRVO was applied" << std::endl;
                 else
                         std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
+        }
+        {
+                std::cout << "=----" << std::endl;
+                const void *localVec = 0;
+                RVO vec = testNRVO2(1, 10, &localVec);
+                if (&vec == localVec)
+                        std::cout << "NRVO was applied" << std::endl;
+                else
+                        std::cout << "NRVO was not applied" << std::endl;
+                std::cout << "-----" << std::endl;
         }
 }
