@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  
+  <Type Name="boost::multi_index::multi_index_container&lt;*,*,*&gt;">  
+    <DisplayString>{node_count,d} items (multi_index_container)</DisplayString>  
+    <Expand>  
+        <Item Name="[size]">node_count</Item>  
+        <Item Name="[ptr]">this</Item>  
+        <Item Name="[header]">(bfm_header*)this</Item>  
+        <Item Name="[buckets]">buckets</Item>  
+        <!--ArrayItems Condition="buckets.spc.data_ != 0">  
+            <Size>buckets.spc.n_</Size>  
+            <ValuePointer>buckets.spc.data_</ValuePointer>  
+        </ArrayItems-->  
+    </Expand>
+  </Type>
+
+  <Type Name="boost::multi_index::detail::hashed_index_node&lt;*&gt;">  
+    <DisplayString>yyy this={(void *)this}</DisplayString>  
+    <!--Expand>  
+        <Item Name="[size]">node_count</Item>  
+        <Item Name="[ptr]">this</Item>  
+        <Item Name="[test]">bfm_header::member</Item>  
+        <Item Name="[test2]">buckets</Item>  
+        <ArrayItems>  
+            <Size>buckets.spc.n_</Size>  
+            <ValuePointer>buckets.spc.data_</ValuePointer>  
+        </ArrayItems>  
+    </Expand-->
+  </Type>
+
+  <Type Name="boost::multi_index::detail::header_holder&lt;boost::multi_index::detail::ordered_index_node&lt;*&gt;*,*&gt;">  
+    <DisplayString>hashed index - {(($T3*)this)->node_count} nodes in {(($T3*)this)->buckets.spc.n_} buckets</DisplayString>  
+    <Expand>  
+        <ArrayItems>  
+            <Size>(($T3*)this)->buckets.spc.n_</Size>  
+            <ValuePointer>(($T3*)this)->buckets.spc.data_</ValuePointer>  
+        </ArrayItems>  
+    </Expand>
+  </Type>
+
+</AutoVisualizer>  
