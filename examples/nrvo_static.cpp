@@ -45,6 +45,16 @@ class RVO : protected Base
         return *this;
     }
     
+    RVO & operator=(RVO &&r)
+    {
+        std::cout << this << " move operator=\n";
+        if (&r != this)
+        {
+            *((Base *)this) = (Base)r;
+        }
+        return *this;
+    }
+    
 };
 
 
