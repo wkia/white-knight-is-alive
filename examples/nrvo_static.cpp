@@ -22,17 +22,19 @@ class RVO : protected Base
     {
         std::cout << this << " param ctor\n";
     }
-    
+
     RVO(const RVO &r)
     {
         std::cout << this << " copy ctor\n";
         *((Base *)this) = (Base)r;
     }
-	RVO(RVO &&r)
-	{
-		std::cout << this << " move ctor\n";
-		*((Base *)this) = std::move((Base)r);
-	}
+
+    RVO(RVO &&r)
+    {
+        std::cout << this << " move ctor\n";
+        *((Base *)this) = std::move((Base)r);
+    }
+
     RVO & operator=(const RVO &r)
     {
         std::cout << this << " operator=\n";
