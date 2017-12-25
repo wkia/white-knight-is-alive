@@ -19,7 +19,6 @@ for mask in sys.argv:
 		print(mp3Filename)
 
 		os.system("avconv -y -i \"%s\" -f ffmetadata metadata.txt" % filename)
-		#with open('metadata.txt', 'r', "utf_8_sig") as myfile:
 		with open('metadata.txt', 'r', encoding="utf8") as myfile:
 			metadata = myfile.read()
 		
@@ -31,8 +30,8 @@ for mask in sys.argv:
 		metadata = re.sub(r'^compatible.*$', '', metadata, flags=re.M)
 		metadata = re.sub(r'^encoder=.*$', '', metadata, flags=re.M)
 		#print (metadata)
-		with open("metadata2.txt", "w", encoding='utf-8-sig') as myfile:
+		with open("metadata2.txt", "w", encoding='utf8') as myfile:
 			myfile.write("%s" % metadata)
 
-		os.system("avconv -threads auto -y -i \"%s\" -i metadata2.txt -ab 256k -map_metadata 1 -id3v2_version 3 \"%s\"" % (filename, mp3Filename))
+		os.system("avconv -y -i \"%s\" -i metadata2.txt -ab 256k -map_metadata 1 -id3v2_version 3 \"%s\"" % (filename, mp3Filename))
 		
