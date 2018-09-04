@@ -1,6 +1,7 @@
 #include <chrono>
 #include <iostream>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -10,9 +11,11 @@ const size_t T = 10;
 const size_t N = 3000000;
 volatile uint64_t var = 0;
 
-namespace
+const std::string sep = ";";
+
+namespace WinApi
 {
-	class CriticalSection 
+	class CriticalSection
 	{
 		CRITICAL_SECTION cs;
 	public:
@@ -24,11 +27,21 @@ namespace
 
 	class SRWLock
 	{
-		SRWLOCK cs;
+		SRWLOCK srw;
 	public:
-		SRWLock() { InitializeSRWLock(&cs); }
-		void lock() { AcquireSRWLockExclusive(&cs); }
-		void unlock() { ReleaseSRWLockExclusive(&cs); }
+		SRWLock() { InitializeSRWLock(&srw); }
+		void lock() { AcquireSRWLockExclusive(&srw); }
+		void unlock() { ReleaseSRWLockExclusive(&srw); }
+	};
+
+	class Mutex
+	{
+		HANDLE h;
+	public:
+		Mutex():h(CreateMutex(NULL, FALSE, NULL)) { }
+		~Mutex() { CloseHandle(h); }
+		void lock() { WaitForSingleObject(h, INFINITE); }
+		void unlock() { ReleaseMutex(h); }
 	};
 }
 
@@ -50,27 +63,42 @@ void runTest(size_t threadCount)
 	M m;
 	std::vector<std::thread> thrs(threadCount);
 
-	auto start = std::chrono::system_clock::now();
-	
+	const auto start = std::chrono::system_clock::now();
+
 	for (auto &t : thrs) t = std::thread(doLock<M>, &m);
 	for (auto &t : thrs) t.join();
-	
-	auto end = std::chrono::system_clock::now();
+
+	const auto end = std::chrono::system_clock::now();
 
 	const std::chrono::duration<double> diff = end - start;
-	std::cout << ";" << diff.count();
+	std::cout << sep << diff.count();
+}
+
+template <class ...Args>
+void runTests(size_t threadMax)
+{
+	//const std::size_t value = sizeof...(Args);
+	//std::cout << value << std::endl;
+	std::cout << "Threads Count" << sep;
+	{
+		int x[] = { (std::cout << typeid(Args).name() << sep, 0)... };
+		(void)x;
+	}
+	std::cout << std::endl;
+
+	for (size_t n = 1; n <= threadMax; ++n)
+	{
+		std::cout << n;
+		{
+			int x[] = { (runTest<Args>(n), 0)... };
+			(void)x;
+		}
+		std::cout << std::endl;
+	}
 }
 
 int main()
 {
-	for (size_t n = 0; n < T; ++n)
-	{
-		std::cout << n;
-		runTest<std::mutex>(n);
-		runTest<CriticalSection>(n);
-		runTest<SRWLock>(n);
-		std::cout << std::endl;
-	}
-    return 0;
+	runTests<std::mutex, WinApi::CriticalSection, WinApi::SRWLock>(T);
+	return 0;
 }
-
