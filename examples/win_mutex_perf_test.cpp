@@ -81,8 +81,8 @@ void runTests(size_t threadMax)
 	//std::cout << value << std::endl;
 	std::cout << "Threads Count" << sep;
 	{
-		int x[] = { (std::cout << typeid(Args).name() << sep, 0)... };
-		(void)x;
+		int dummy[] = { (std::cout << typeid(Args).name() << sep, 0)... };
+		(void)dummy;
 	}
 	std::cout << std::endl;
 
@@ -90,8 +90,8 @@ void runTests(size_t threadMax)
 	{
 		std::cout << n;
 		{
-			int x[] = { (runTest<Args>(n), 0)... };
-			(void)x;
+			int dummy[] = { (runTest<Args>(n), 0)... };
+			(void)dummy;
 		}
 		std::cout << std::endl;
 	}
