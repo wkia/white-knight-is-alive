@@ -55,6 +55,11 @@ public:
 	}
 };
 
+RVO &ReturnSelfRef(RVO &r)
+{
+	return r;
+}
+
 RVO testRVO0(int value, size_t size, const void **localVec)
 {
 	std::cout << __FUNCTION__ << std::endl;
@@ -86,6 +91,14 @@ RVO testNRVO0(int value, size_t size, const void **localVec)
 	RVO vec(size, value);
 	*localVec = &vec;
 	return vec;
+}
+
+RVO testNRVO0_ref(int value, size_t size, const void **localVec)
+{
+	std::cout << __FUNCTION__ << std::endl;
+	RVO vec(size, value);
+	*localVec = &vec;
+	return ReturnSelfRef(vec);
 }
 
 RVO testNRVO1(int value, size_t size, const void **localVec)
@@ -186,6 +199,16 @@ int main()
 		std::cout << "\n=----\n";
 		const void *localVec = 0;
 		RVO vec = testNRVO0(value, size, &localVec);
+		if (&vec == localVec)
+			std::cout << "NRVO was applied" << std::endl;
+		else
+			std::cout << "NRVO was not applied" << std::endl;
+		std::cout << "-----\n";
+	}
+	{
+		std::cout << "\n=----\n";
+		const void *localVec = 0;
+		RVO vec = testNRVO0_ref(value, size, &localVec);
 		if (&vec == localVec)
 			std::cout << "NRVO was applied" << std::endl;
 		else
