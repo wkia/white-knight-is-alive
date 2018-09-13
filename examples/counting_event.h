@@ -1,3 +1,5 @@
+#include <mutex>
+
 class CountingEvent
 {
 private:
