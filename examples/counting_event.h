@@ -18,9 +18,9 @@ public:
 	}
 
 	template<class _Rep, class _Period>
-	bool wait_for(const std::chrono::duration<_Rep, _Period>& _Rel_time)
+	bool wait_for(const std::chrono::duration<_Rep, _Period>& timeout)
 	{
-		const auto end = std::chrono::system_clock::now() + _Rel_time;
+		const auto end = std::chrono::system_clock::now() + timeout;
 		std::unique_lock<decltype(m_mutex)> lock(m_mutex);
 		if (!m_condition.wait_until(lock, end, [this]() { return 0 == m_count; }))
 			return false;
