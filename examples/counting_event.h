@@ -15,8 +15,8 @@ public:
 	{
 		std::unique_lock<decltype(m_mutex)> lock(m_mutex);
 		assert(0 != m_count);
-		--m_count;
-		m_condition.notify_all();
+		if (0 == --m_count)
+			m_condition.notify_all();
 	}
 
 	template<class _Rep, class _Period>
