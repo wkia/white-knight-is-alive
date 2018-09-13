@@ -1,3 +1,4 @@
+#include <cassert>
 #include <mutex>
 
 class CountingEvent
@@ -13,6 +14,7 @@ public:
 	void notify()
 	{
 		std::unique_lock<decltype(m_mutex)> lock(m_mutex);
+		assert(0 != m_count);
 		--m_count;
 		m_condition.notify_all();
 	}
