@@ -9,7 +9,7 @@ constexpr long long Count = 100000000;
 using T = int;
 
 template <class F>
-void runTest(const std::string title, F testFunc)
+void runTest(const std::string &title, F testFunc)
 {
 	auto start = std::chrono::system_clock::now();
 
@@ -19,7 +19,7 @@ void runTest(const std::string title, F testFunc)
 	}
 
 	std::chrono::duration<double> dur = std::chrono::system_clock::now() - start;
-	std::cout << title << "<" << typeid(T).name() << ">: " << dur.count() << " s" << std::endl;
+	std::cout << title << "<" << typeid(T).name() << "> : " << dur.count() << " secs" << std::endl;
 }
 
 int main()
