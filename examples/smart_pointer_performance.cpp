@@ -6,6 +6,15 @@
 #include <boost/make_shared.hpp>
 
 constexpr long long Count = 100000000;
+
+struct S
+{
+	S(size_t i) : a(i), b(i + .1) { s.resize(i % 100, ' '); }
+	int a;
+	double b;
+	std::string s;
+};
+
 using T = int;
 
 template <class F>
