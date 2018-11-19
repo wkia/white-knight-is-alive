@@ -31,18 +31,27 @@ int main()
 	srand(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 	std::cout << "Number of iterations: " << Count << std::endl << std::endl;
 
+	using TestFunc = std::function<void(const size_t &)>;
 	auto &v = g_v;
+
 	runTest("Function pointer", test);
-
-	runTest("Lambda inlined impl", [&v](const size_t &i) { v = i + rand(); });
-	auto lm = [&v](const size_t &i) { v = i + rand(); };
-	runTest("Lambda inlined impl (2)", lm);
-
-	runTest("Lambda function call", [&v](const size_t &i) { test(i); });
-	auto lm2 = [&v](const size_t &i) { test(i); };
-	runTest("Lambda function call (2)", lm2);
-
-	runTest("std::function", std::function<void(const size_t &)>(test));
-	auto fn = std::function<void(const size_t &)>(test);
-	runTest("std::function (2)", fn);
+	{
+		runTest("Lambda inlined impl", [&v](const size_t &i) { v = i + rand(); });
+		auto f2 = [&v](const size_t &i) { v = i + rand(); };
+		runTest("Lambda inlined impl (2)", f2);
+		TestFunc f3 = [&v](const size_t &i) { v = i + rand(); };
+		runTest("Lambda inlined impl (3)", f3);
+	}
+	{
+		runTest("Lambda function call", [&v](const size_t &i) { test(i); });
+		auto f2 = [&v](const size_t &i) { test(i); };
+		runTest("Lambda function call (2)", f2);
+		TestFunc f3 = [&v](const size_t &i) { test(i); };
+		runTest("Lambda function impl (3)", f3);
+	}
+	{
+		runTest("std::function", TestFunc(test));
+		auto f = TestFunc(test);
+		runTest("std::function (2)", f);
+	}
 }
