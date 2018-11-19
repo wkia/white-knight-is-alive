@@ -1,13 +1,14 @@
 #include <chrono>
-#include <iostream>
 #include <cstdlib>
 #include <functional>
+#include <iostream>
+#include <string>
 
 constexpr long long Count = 300000000;
 volatile int g_v;
 
 template <class F>
-void runTest(F testFunc)
+void runTest(std::string title, F testFunc)
 {
 	auto start = std::chrono::system_clock::now();
 
@@ -17,7 +18,7 @@ void runTest(F testFunc)
 	}
 
 	std::chrono::duration<double> dur = std::chrono::system_clock::now() - start;
-	std::cout << "<" << typeid(F).name() << "> : " << dur.count() << " secs" << std::endl;
+	std::cout << title << ": <" << typeid(F).name() << "> : " << dur.count() << " secs" << std::endl;
 }
 
 void test(const size_t &i)
@@ -31,17 +32,17 @@ int main()
 	std::cout << "Number of iterations: " << Count << std::endl << std::endl;
 
 	auto &v = g_v;
-	runTest(test);
+	runTest("Function pointer", test);
 
-	runTest([&v](const size_t &i) { v = i + rand(); });
+	runTest("Lambda inlined impl", [&v](const size_t &i) { v = i + rand(); });
 	auto lm = [&v](const size_t &i) { v = i + rand(); };
-	runTest(lm);
+	runTest("Lambda inlined impl (2)", lm);
 
-	runTest([&v](const size_t &i) { test(i); });
+	runTest("Lambda function call", [&v](const size_t &i) { test(i); });
 	auto lm2 = [&v](const size_t &i) { test(i); };
-	runTest(lm2);
+	runTest("Lambda function call (2)", lm2);
 
-	runTest(std::function<void(const size_t &)>(test));
+	runTest("std::function", std::function<void(const size_t &)>(test));
 	auto fn = std::function<void(const size_t &)>(test);
-	runTest(fn);
+	runTest("std::function (2)", fn);
 }
