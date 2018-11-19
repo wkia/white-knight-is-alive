@@ -32,26 +32,26 @@ int main()
 	std::cout << "Number of iterations: " << Count << std::endl << std::endl;
 
 	using TestFunc = std::function<void(const size_t &)>;
-	auto &v = g_v;
 
 	runTest("Function pointer", test);
 	{
+		runTest("std::function", TestFunc(test));
+		auto f = TestFunc(test);
+		runTest("std::function (2)", f);
+	}
+	{
+		runTest("Lambda function call", [](const size_t &i) { test(i); });
+		auto f2 = [](const size_t &i) { test(i); };
+		runTest("Lambda function call (2)", f2);
+		TestFunc f3 = [](const size_t &i) { test(i); };
+		runTest("Lambda function call (3)", f3);
+	}
+	{
+		auto &v = g_v;
 		runTest("Lambda inlined impl", [&v](const size_t &i) { v = i + rand(); });
 		auto f2 = [&v](const size_t &i) { v = i + rand(); };
 		runTest("Lambda inlined impl (2)", f2);
 		TestFunc f3 = [&v](const size_t &i) { v = i + rand(); };
 		runTest("Lambda inlined impl (3)", f3);
-	}
-	{
-		runTest("Lambda function call", [&v](const size_t &i) { test(i); });
-		auto f2 = [&v](const size_t &i) { test(i); };
-		runTest("Lambda function call (2)", f2);
-		TestFunc f3 = [&v](const size_t &i) { test(i); };
-		runTest("Lambda function impl (3)", f3);
-	}
-	{
-		runTest("std::function", TestFunc(test));
-		auto f = TestFunc(test);
-		runTest("std::function (2)", f);
 	}
 }
