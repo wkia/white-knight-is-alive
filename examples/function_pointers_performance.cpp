@@ -7,19 +7,13 @@ constexpr long long Count = 300000000;
 volatile int g_v;
 
 template <class F>
-void runTestImpl(F testFunc)
-{
-	testFunc(rand());
-}
-
-template <class F>
-void runTest(F &&testFunc)
+void runTest(F testFunc)
 {
 	auto start = std::chrono::system_clock::now();
 
 	for (size_t i = 0; i < Count; ++i)
 	{
-		runTestImpl(testFunc);
+		testFunc(rand());
 	}
 
 	std::chrono::duration<double> dur = std::chrono::system_clock::now() - start;
