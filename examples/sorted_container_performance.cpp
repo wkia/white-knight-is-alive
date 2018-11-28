@@ -217,28 +217,36 @@ void runTestSet(C &c, long long n)
 template <class T>
 void runTest(long long n)
 {
+	const auto t = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
 	{
+		srand(t);
 		std::vector<T> v;
 		runTestVector(v, n);
 	}
 	{
+		srand(t);
 		std::vector<T> v;
 		v.reserve(n);
 		runTestVector(v, n);
 	}
 	{
+		srand(t);
 		std::deque<T> d;
 		runTestDeque(d, n);
 	}
 	{
+		srand(t);
 		std::set<T> s;
 		runTestSet(s, n);
 	}
 	{
+		srand(t);
 		boost::container::flat_set<T> s;
 		runTestSet(s, n);
 	}
 	//{
+	//	srand(t);
 	//	std_list<T> s;
 	//	runTestList(s, n);
 	//}
@@ -251,9 +259,6 @@ int main()
 	{
 		for (long long n = 128; n < Count; n *= Step)
 		{
-			const auto t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-			srand(t.count());
-
 			std::cout << "--- Number of iterations: " << n << std::endl;
 			std::cout
 				<< std::setw(ColumnWidth) << std::right << "fill & sort"
