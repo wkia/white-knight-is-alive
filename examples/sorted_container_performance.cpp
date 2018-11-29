@@ -7,6 +7,7 @@
 #include <set>
 #include <vector>
 #include <boost/container/flat_set.hpp>
+#include <memory>
 
 constexpr long long Count = 10000000;
 constexpr long long Step = 2;
@@ -22,21 +23,20 @@ public:
 
 struct Struct
 {
-	Struct(size_t i) : a(i), b(i + .1) { s.resize(i % 100, ' '); }
+	explicit Struct(size_t i) : a(i), b(i + .1) { s.resize(i % 1000, ' '); }
 	int a;
 	double b;
 	std::string s;
-	bool operator<(const Struct &r) const
-	{
-		return a < r.a;
-	}
-	bool operator==(const Struct &r) const
-	{
-		return a == r.a && b == r.b && s == r.s;
-	}
+
+	bool operator<(const Struct &r) const { return a < r.a; }
+	bool operator==(const Struct &r) const { return a == r.a && b == r.b && s == r.s; }
 };
 
-using T = int;
+using StructPtr = std::shared_ptr<struct Struct>;
+
+template <typename T> T make_value() { return T(rand()); }
+template <> std::unique_ptr<Struct> make_value() { return std::make_unique<Struct>(rand()); }
+template <> std::shared_ptr<Struct> make_value() { return std::make_shared<Struct>(rand()); }
 
 template <class C>
 double searchLowerBound(C &c)
@@ -123,7 +123,7 @@ void runTestVector(C &c, long long n)
 		const auto start = std::chrono::system_clock::now();
 		while (n--)
 		{
-			c.push_back(rand());
+			c.push_back(make_value<C::value_type>());
 		}
 		std::sort(c.begin(), c.end());
 		times.push_back(std::chrono::duration<double>(std::chrono::system_clock::now() - start).count());
@@ -148,7 +148,7 @@ void runTestDeque(C &c, long long n)
 		const auto start = std::chrono::system_clock::now();
 		while (n--)
 		{
-			c.push_back(rand());
+			c.push_back(make_value<C::value_type>());
 		}
 		std::sort(c.begin(), c.end());
 		times.push_back(std::chrono::duration<double>(std::chrono::system_clock::now() - start).count());
@@ -173,7 +173,7 @@ void runTestList(C &c, long long n)
 		const auto start = std::chrono::system_clock::now();
 		while (n--)
 		{
-			c.push_back(rand());
+			c.push_back(make_value<C::value_type>());
 		}
 		c.sort();
 		times.push_back(std::chrono::duration<double>(std::chrono::system_clock::now() - start).count());
@@ -198,7 +198,7 @@ void runTestSet(C &c, long long n)
 		const auto start = std::chrono::system_clock::now();
 		while (n--)
 		{
-			c.insert(rand());
+			c.insert(make_value<C::value_type>());
 		}
 		times.push_back(std::chrono::duration<double>(std::chrono::system_clock::now() - start).count());
 	}
@@ -220,33 +220,33 @@ void runTest(long long n)
 	const auto t = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	{
-		srand(t);
+		srand(int(t));
 		std::vector<T> v;
 		runTestVector(v, n);
 	}
 	{
-		srand(t);
+		srand(int(t));
 		std::vector<T> v;
-		v.reserve(n);
+		v.reserve(decltype(v)::size_type(n));
 		runTestVector(v, n);
 	}
 	{
-		srand(t);
+		srand(int(t));
 		std::deque<T> d;
 		runTestDeque(d, n);
 	}
 	{
-		srand(t);
+		srand(int(t));
 		std::set<T> s;
 		runTestSet(s, n);
 	}
 	{
-		srand(t);
+		srand(int(t));
 		boost::container::flat_set<T> s;
 		runTestSet(s, n);
 	}
 	//{
-	//	srand(t);
+	//	srand(int(t));
 	//	std_list<T> s;
 	//	runTestList(s, n);
 	//}
@@ -267,6 +267,8 @@ int main()
 				<< std::endl;
 			runTest<int>(n);
 			runTest<Struct>(n);
+			runTest<std::shared_ptr<Struct>>(n);
+			//runTest<std::unique_ptr<Struct>>(n);
 		}
 	}
 	catch (const std::exception &e)
