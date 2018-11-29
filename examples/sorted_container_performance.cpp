@@ -32,18 +32,21 @@ struct Struct
 	bool operator==(const Struct &r) const { return a == r.a && b == r.b && s == r.s; }
 };
 
-using StructPtr = std::shared_ptr<struct Struct>;
-
 template <typename T> T make_value() { return T(rand()); }
 template <> std::unique_ptr<Struct> make_value() { return std::make_unique<Struct>(rand()); }
 template <> std::shared_ptr<Struct> make_value() { return std::make_shared<Struct>(rand()); }
 
+template <typename T> T clone(const T &v) { return v; }
+template <> std::unique_ptr<Struct> clone(const std::unique_ptr<Struct> &v) { return std::make_unique<Struct>(v->a); }
+
 template <class C>
 double searchLowerBound(C &c)
 {
+	std::vector<C::value_type> cc;
+	std::transform(std::begin(c), std::end(c), std::back_inserter(cc), [](auto &e) { return clone(e); });
+
 	double t = 0;
 	const auto N = c.size();
-	auto cc = c;
 	const auto start = std::chrono::system_clock::now();
 	for (const auto &e : cc)
 	{
@@ -56,9 +59,11 @@ double searchLowerBound(C &c)
 template <class C>
 double searchFind(C &c)
 {
+	std::vector<C::value_type> cc;
+	std::transform(std::begin(c), std::end(c), std::back_inserter(cc), [](auto &e) { return clone(e); });
+
 	double t = 0;
 	const auto N = c.size();
-	auto cc = c;
 	const auto start = std::chrono::system_clock::now();
 	for (const auto &e : cc)
 	{
@@ -90,7 +95,7 @@ void printResults(const std::vector<double> &times, const std::string &typeName)
 {
 	auto str = typeName;
 
-	const std::vector<std::string> ext = { "class ", "struct " };
+	const std::vector<std::string> ext = { "class ", "struct "};
 	for (const auto &e : ext)
 	{
 		auto pos = str.find(e);
@@ -268,7 +273,7 @@ int main()
 			runTest<int>(n);
 			runTest<Struct>(n);
 			runTest<std::shared_ptr<Struct>>(n);
-			//runTest<std::unique_ptr<Struct>>(n);
+			runTest<std::unique_ptr<Struct>>(n);
 		}
 	}
 	catch (const std::exception &e)
